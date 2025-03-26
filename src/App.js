@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import ChannelsModal from "./components/ChannelsModal";
+import "./App.css";
 
 function App() {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://channels.social/widget.js?apiKey=YOUR_API_KEY";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
+  const openChannels = () => {
+    setModalOpen(true);
+    if (window.openChannelsWidget) {
+      window.openChannelsWidget({
+        selectedChannel: "general",
+        email: "test@example.com",
+      });
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>🔗 Channels Test Integration</h1>
+      <button className="launch-button" onClick={openChannels}>
+        Open Channels
+      </button>
+
+      {modalOpen && <ChannelsModal onClose={() => setModalOpen(false)} />}
     </div>
   );
 }
